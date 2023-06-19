@@ -5,11 +5,48 @@ count number of characters, words and spaces present in the input string
 
 #define IP_BUFFER_SIZE 512
 
+#define IN 1
+
+#define OUT 0 
+ 
+#define IS_WHITE_SPACE(c)  ((c) == ' ' || \
+                            (c) == '\n' || \
+                            (c) == '\r' || \
+                            (c) == '\v' || \
+                            (c) == '\f' || \
+                            (c) == '\t')
+
 char *ptr = " Some String";
 char aptr[] = "Something";
 
 
-int get_line(char *buff,int max)
+int word_count(char * buff)
+{
+  int inword=OUT, c, words=0;
+  while(c=*buff)
+  {
+    if(!IS_WHITE_SPACE(c))
+     {
+      if(inword == OUT)
+      {
+       words++;
+       inword=IN;
+      }
+     }
+    if(IS_WHITE_SPACE(c))
+    {
+     if(inword == IN)
+     {
+      inword=OUT;
+      buff++;
+     }
+   }
+   if(inword=IN)
+    words++;
+  return words;
+}
+}
+int get_line(char *buff, int max)
 {
   int c, ch_count = 0;
   int spaces = 0, words = 0, inword = 0;
@@ -21,16 +58,10 @@ int get_line(char *buff,int max)
     ch_count++;
     if(c == ' ' || c == '\n' || c == '\t')
      spaces++;
-    if(c != ' ' && c != '\n' && c != '\t' && !inword)
-    {
-      words++;
-      inword=1;
-    }
-    if((c == ' ' || c == '\n' || c == '\t') && inword)
-     inword=0;
+    
   }
   *buff = '\0'; 
-  printf("\nSpaces= %d\nWords = %d\n", spaces,words);
+  printf("\nSpaces= %d\n", spaces);
   return ch_count;
 }
 
@@ -41,7 +72,10 @@ int main()
   int c = get_line(ip_buffer, IP_BUFFER_SIZE);
   
   printf("Characters %d\n",c);
+  int w_count = word_count(ip_buffer);
+  printf("Words=%d\n", w_count);
   printf("Size of one input buffer is %lu\n", sizeof(ip_buffer));
   printf("Size of one input buffer is %lu\n", sizeof(ip_buffer[0]));
+  return 0;
 }
  
