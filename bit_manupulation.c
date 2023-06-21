@@ -1,6 +1,7 @@
+/*This Program gives us the bits present in a number within a particular range of positions specified by pos_start and pos_end */
 #include <stdio.h>
 
-unsigned int get_bit1(unsigned int no, int pos_start, int pos_end)
+unsigned int get_lsb(unsigned int no, int pos_start, int pos_end)
 {
     unsigned int result, mask;
     mask = (~0u >> (31 - (pos_end - pos_start))) << pos_start;
@@ -8,7 +9,7 @@ unsigned int get_bit1(unsigned int no, int pos_start, int pos_end)
     return result;
 }
 
-unsigned int get_bit2(unsigned int no, int pos_start, int pos_end)
+unsigned int get_msb(unsigned int no, int pos_start, int pos_end)
 {
     unsigned int result, mask;
     mask = (~0u >> (31 - (pos_end - pos_start))) << pos_start;
@@ -17,7 +18,7 @@ unsigned int get_bit2(unsigned int no, int pos_start, int pos_end)
     return result;
 }
 
-unsigned int get_bit3(unsigned int no, int pos_start, int pos_end)
+unsigned int get_range(unsigned int no, int pos_start, int pos_end)
 {
     unsigned int result, mask;
     mask = (~0u >> (31 - pos_end)) << pos_start;
@@ -55,7 +56,7 @@ int main()
     printf("Number before operation is\n");
     print_binary(number);
 
-    number = get_bit2(number, pos_start, pos_end);
+    number = get_msb(number, pos_start, pos_end);
     print_binary(number);
 
     return 0;
