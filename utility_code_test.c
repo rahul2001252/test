@@ -17,7 +17,7 @@ is valid or not. Also convert the characters and strings to upper and lower char
 #define TO_UPPER(c) (((c)>='a' && (c)<='z')?(c)=(c)+'A'-'a':(c))
 
 char str1[MAX_STR_SIZE] = "Hello";
-char str2[MAX_STR_SIZE] = "World";
+char str2[MAX_STR_SIZE] = "world";
 
 int ascii_to_int(char *s)
 {
@@ -136,6 +136,32 @@ void print_memory(char *dest, int size)
  printf("\n");
 }
   
+void string_reverse(char dest[])
+{
+  if(dest == NULL)
+  {
+   printf("Error: NULL Pointer occured\n");
+  }
+  else
+  {
+    int length=0,index=0,temp,j;
+    for(index=0; dest[index]!='\0'; index++)
+    {
+     length++;
+    }
+    printf("Length of string %d\n", length);
+    for(int i=0, j=length-1; i<j; i++,j--)
+    {
+      temp = dest[i];
+      dest[i] = dest[j];
+      dest[j] = temp;
+    }
+  }
+}
+
+    
+  
+  
 char *str_cat(char *str1,char *str2)
 {
    char *s=str1;
@@ -157,9 +183,18 @@ char *str_cat(char *str1,char *str2)
    }
 }
 
+void mem_set(char *ptr, char c, int size)
+{
+  while(size>0)
+  {
+    *ptr = c;
+    ptr++;
+    size--;
+  }
+}  
 int main()
 {
-    char ip_str[MAX_STR_SIZE],cp_str[MAX_STR_SIZE],m_str[MAX_STR_SIZE],c='Z',*cptr,*str;
+    char ip_str[MAX_STR_SIZE],cp_str[MAX_STR_SIZE],m_str[MAX_STR_SIZE],me_str[MAX_STR_SIZE],c='Z',*cptr,*str;
     
     printf("Enter the string\n");
       scanf("%[^\n]",ip_str);
@@ -187,6 +222,13 @@ int main()
     
     str = str_cat(str1, str2);
     printf(" String is %s\n", str);
+    
+    mem_set(me_str,'a',sizeof(me_str));
+    printf("After Mem Set %s\n", me_str);
+    
+    printf("String before reversing %s\n", str2);
+    string_reverse(str2);
+    printf("String after reverse %s\n", str2);
     
     return 0; 
 }
