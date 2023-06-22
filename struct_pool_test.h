@@ -22,4 +22,5 @@ typedef struct Rectangle_t
   struct Rectangle_t *next;
 }Rectangle;
 
+extern int _pool_node_main();
 #endif
