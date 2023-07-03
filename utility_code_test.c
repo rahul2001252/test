@@ -1,8 +1,8 @@
 /* Thus file contains some utility functions which converts the string into ascii and 
 converts it to integers and prints it. It also validates wheather the entered character
 is valid or not. Also convert the characters and strings to upper and lower characters. Concatenation of two strings using pointers is also performed.*/
-
 #include<stdio.h>
+#include "utility_code_test.h"
 
 #define MAX_STR_SIZE 100
 
@@ -16,9 +16,25 @@ is valid or not. Also convert the characters and strings to upper and lower char
 
 #define TO_UPPER(c) (((c)>='a' && (c)<='z')?(c)=(c)+'A'-'a':(c))
 
-char str1[MAX_STR_SIZE] = "Hello";
-char str2[MAX_STR_SIZE] = "world";
+#define IS_WHITE_SPACE(c)  ((c) == ' ' || \
+                            (c) == '\n' || \
+                            (c) == '\r' || \
+                            (c) == '\v' || \
+                            (c) == '\f' || \
+                            (c) == '\t')
+#define BIG_INDIAN 0X01
+#define LITTLE_INDIAN 0X02
+                            
+#define IS_BIG_INDIAN (get_indian() == BIG_INDIAN)
 
+#define IS_LITTLE_INDIAN (get indian() == LITTLE_INDIAN)
+
+char str1[MAX_STR_SIZE] = "Hello world";
+char str2[MAX_STR_SIZE] = "Again";
+char tr_str[MAX_STR_SIZE]= "  AB CD  ";
+char search[10] = "world";
+char *result;
+int int_val =0x1A2B3C4D;
 int ascii_to_int(char *s)
 {
   int c,number = 0, digit_started = 0, sign_present = 0;
@@ -183,6 +199,76 @@ char *str_cat(char *str1,char *str2)
    }
 }
 
+int get_length( char *temp_ptr)
+{
+    int length;
+    length = 0;
+    while(*temp_ptr != '\0')
+    {
+        length++;
+        temp_ptr++;
+      }
+    return length;
+}
+
+char *trim_string( char *str)
+{
+    /*int length;
+    char *temp_ptr;
+    int i=0;
+    int j;*/
+    int f_index=-1;
+    int l_index=-1;
+    int idx;
+    if(!str)
+    {
+     printf("Empty String\n");
+    }
+    for(idx=0;str[idx]!='\0';idx++)
+    {
+     if(!IS_WHITE_SPACE(str[idx]))
+     {
+       if(f_index == -1)
+       {
+         f_index =idx;
+       }
+        l_index=idx;
+     }
+    }
+    str[l_index+1]='\0';
+    for(idx=0;f_index<=l_index;f_index++,idx++)
+     str[idx] = str[f_index];
+     str[idx]='\0';
+    /*//length = get_length( str );
+    while(IS_WHITE_SPACE(str[i]))
+    {
+      i++;
+    }
+    for(j=0,i;str[i]!='\0';j++,i++)
+    {
+      str[j]=str[i];
+    }
+    
+    /*while( IS_WHITE_SPACE(str[0]))
+    {
+        i = 0;
+        while(str[i] != '\0')
+        {
+            str[i] = str[i + 1];
+            i++;
+        }
+        str[i] = '\0';
+    }
+     
+    j = get_length(str) - 1;
+    while( IS_WHITE_SPACE(str[j]))
+    {
+        j--;
+    }
+    str[j+1]='\0';*/
+    return str;
+}   
+
 void mem_set(char *ptr, char c, int size)
 {
   while(size>0)
@@ -191,10 +277,54 @@ void mem_set(char *ptr, char c, int size)
     ptr++;
     size--;
   }
-}  
-int main()
+}
+int get_indian()
 {
-    char ip_str[MAX_STR_SIZE],cp_str[MAX_STR_SIZE],m_str[MAX_STR_SIZE],me_str[MAX_STR_SIZE],c='Z',*cptr,*str;
+  char *char_ptr=(char *)&int_val;
+  int val =*char_ptr;
+  if(val== 0x1A)
+   return BIG_INDIAN;
+  else
+   return LITTLE_INDIAN;
+}
+
+int str_cmp(char *s, char *t)
+{
+ for(int i=0; s[i]==t[i];i++)
+  if(s[i]=='\0')
+   return 0;
+  else
+   return s[i]-t[i];
+}
+
+char *strstr(char *s, char *search_str)
+{
+  int i,j;
+  if(*search_str =='\0')
+   return s;
+  for(i=0;s[i] != '\0'; i++)
+  {
+    if(s[i] == search_str[0])
+    {
+      for( j=1; search_str[j] != '\0'; j++)
+      {
+        if(s[i+j]!=search_str[j])
+        {
+         break;
+        }
+      }
+      if(search_str[j] == '\0')
+      {
+       return &s[i];
+      }
+    }
+  }
+  return NULL;  
+ }
+
+int utilities_main()
+{
+    char ip_str[MAX_STR_SIZE],cp_str[MAX_STR_SIZE],m_str[MAX_STR_SIZE],me_str[MAX_STR_SIZE],c='Z',*cptr,*str,*tstr;
     
     printf("Enter the string\n");
       scanf("%[^\n]",ip_str);
@@ -230,5 +360,34 @@ int main()
     string_reverse(str2);
     printf("String after reverse %s\n", str2);
     
+    printf("The trimming string %s\n",tr_str);
+    tstr = trim_string(tr_str);
+    printf("String after trimming:%s",tstr);
+    
+    int ind = get_indian();
+    if(IS_BIG_INDIAN)
+     printf("\nBig Indian\n");
+    else
+     printf("\nLittle Indian\n");
+     
+    int cmp = str_cmp(str1,str2);
+    if(!cmp)
+     printf("\nStrings are same\n");
+    else
+     printf("\nStrings are not equal\n");
+    printf("String is %s\n",str1);
+    printf("Search String is %s\n",search);
+    char *st = strstr(str1,search);
+    if(st != NULL)
+     printf("String found at index %ld\n",st-str1);
+    else
+     printf("String not found"); 
+    
     return 0; 
 }
+#ifndef RELOCATABLE_OBJ
+int main()
+{
+ utilities_main();
+}
+#endif 
